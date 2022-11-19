@@ -8,7 +8,7 @@ const app = express();
 // app.use(express.json())
 
 const corsOptions ={
-    origin:'http://localhost:3000', 
+    origin:'http://localhost:5000', 
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200
 }
@@ -16,33 +16,38 @@ const corsOptions ={
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const mongodbURL = "mongodb://localhost:27017/fashionDB";
+const mongodbURL = "mongodb://localhost:27017/socialMediaDB";
 
 mongoose.connect(mongodbURL);
 
-const itemSchema = {
-    name: String
+const thoughtSchema = {
+    text: String
 };
 
-const Item = mongoose.model("Item", itemSchema);
+const Thought = mongoose.model("Thought", thoughtSchema);
 
-app.get("/", (req, res) => {
-    const url = "";
+app.get("/", (req,res) => {
+    
+    Thought.find({}, (err, result) => {
+        res.json(result);
+    });
+    
 });
 
-app.post("/search", (req, res) => {
-    const userSearchQuery = req.body.name;
+app.post("/createThought", (req, res) => {
 
-    const item = new Item({
-        name: userSearchQuery
+    const userThought = req.body.thoughtInput;
+    console.log(userThought);
+    const thought = new Thought({
+        text: userThought
     });
 
-    item.save(err => {
+    thought.save(err => {
         if (!err) { 
-            console.log("Searching...");
+            console.log("Created");
             res.redirect("/");
         } else {
-            console.log("Err while fetching");
+            console.log("Err while creating thought");
         }
     })
     

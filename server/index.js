@@ -34,6 +34,7 @@ app.get("/", (req,res) => {
     
 });
 
+
 app.post("/createThought", (req, res) => {
 
     const userThought = req.body.thoughtInput;
